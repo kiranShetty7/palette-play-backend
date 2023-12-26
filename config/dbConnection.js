@@ -3,16 +3,16 @@ const dotenv = require('dotenv').config()
 const URI = process.env.URI
 
 
-const connectToBlabberDB = async () => {
+const connectToDB = async () => {
     console.log(URI, "dscs")
     try {
         const connection = await mongoose.connect(URI, { dbName: 'palette-play' })
-        console.log(`Connected to Blabber DB on ${connection.connection.host}`)
+        console.log(`Connected to Palatte-play DB on ${connection.connection.host}`)
     }
     catch (error) {
-        console.log('Error connecting to the Blabber DB', error)
+        console.log('Error connecting to the Palatte-play DB', error)
         process.exit(1)
     }
 }
 
-module.exports = connectToBlabberDB
+module.exports = connectToDB

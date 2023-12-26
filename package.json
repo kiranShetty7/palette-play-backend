@@ -1,12 +1,12 @@
 {
-  "name": "blabber-backend",
+  "name": "palatte-play-backend",
   "version": "1.0.0",
-  "description": "This is the backend for blabber chat application",
+  "description": "This is the backend for palatte-play  application",
   "main": "app",
   "scripts": {
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "blabber": "nodemon app.js"
+    "palatte-play": "nodemon app.js"
   },
   "author": "Kiran R Shetty",
   "license": "ISC",

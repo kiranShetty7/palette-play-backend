@@ -90,34 +90,6 @@ const register = asyncHandler(async (req, res) => {
     }
 });
 
-const getBlabberUsers = asyncHandler(async (req, res) => {
-    const { userid } = req.headers;
-
-    if (!userid) {
-        res.status(400);
-        throw new Error("Please send userid");
-    } else {
-        const filter = req.query?.filter || '';
-
-        const users = await User.find({
-            $and: [
-                {
-                    $or: [
-                        { name: { $regex: filter, $options: 'i' } },
-                        { email: { $regex: filter, $options: 'i' } },
-                    ],
-                },
-                { _id: { $ne: userid } },
-            ],
-        }).select('-password');
-
-        res.json({
-            success:true,
-            message:'User retrieved successfully',
-            data: users,
-        });
-    }
-});
 
 
-module.exports = { login, register, getBlabberUsers }
+module.exports = { login, register }
