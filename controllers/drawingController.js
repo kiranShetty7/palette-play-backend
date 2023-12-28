@@ -82,43 +82,42 @@ const getIndividualDrawing = asyncHandler(async (req, res) => {
 
 const saveDrawing = asyncHandler(async (req, res) => {
 
-    const { url, drawingId } = req.body
+    const { url, userId, name } = req.body
 
     try {
-        if (!drawingId) {
-            res.status(400)
-            throw new Error("Invalid Drawing ID")
+
+
+        if (!userId) {
+            res.status(400);
+            throw new Error("userId is required")
         }
-        else if (!url) {
-            res.status(400)
-            throw new Error("Url required")
+        if (!url) {
+            res.status(400);
+            throw new Error("url is required")
         }
+        if (!name) {
+            res.status(400);
+            throw new Error("name is required")
+        }
+
+        let newDrawing = new Drawing()
+        newDrawing = {
+            name,
+            user: userId,
+            url
+        }
+        const drawingCreated = await Drawing.create(newDrawing)
+        if (drawingCreated)
+            res.status(201).json({
+                success: true,
+                message: "success",
+                drawingId: drawingCreated._id
+            })
         else {
-            const update = {
-                $set: {
-                    url: url
-                }
-            };
-            const condition = { _id: drawingId };
-            const saveDrawing = await Drawing.updateOne(condition, update)
-                .sort({ timeStamp: 1 })
-                .select('-drawingId')
-
-
-            if (saveDrawing) {
-                res.status(200).json({
-                    success: true,
-                    message: "Drawing saved succesfully",
-                    data: saveDrawing
-                })
-            }
-            else {
-                res.status(200).json({
-                    success: false,
-                    message: "Drawing could not besaved ",
-
-                })
-            }
+            res.status(200).json({
+                success: false,
+                message: "Drawing could not be created",
+            })
         }
     } catch (error) {
         res.status(500).json({
@@ -127,6 +126,50 @@ const saveDrawing = asyncHandler(async (req, res) => {
             error: error.message
         });
     }
+
+    // try {
+    //     if (!drawingId) {
+    //         res.status(400)
+    //         throw new Error("Invalid Drawing ID")
+    //     }
+    //     else if (!url) {
+    //         res.status(400)
+    //         throw new Error("Url required")
+    //     }
+    //     else {
+    //         const update = {
+    //             $set: {
+    //                 url: url
+    //             }
+    //         };
+    //         const condition = { _id: drawingId };
+    //         const saveDrawing = await Drawing.updateOne(condition, update)
+    //             .sort({ timeStamp: 1 })
+    //             .select('-drawingId')
+
+
+    //         if (saveDrawing) {
+    //             res.status(200).json({
+    //                 success: true,
+    //                 message: "Drawing saved succesfully",
+    //                 data: saveDrawing
+    //             })
+    //         }
+    //         else {
+    //             res.status(200).json({
+    //                 success: false,
+    //                 message: "Drawing could not besaved ",
+
+    //             })
+    //         }
+    //     }
+    // } catch (error) {
+    //     res.status(500).json({
+    //         success: false,
+    //         message: "Internal server error",
+    //         error: error.message
+    //     });
+    // }
 })
 
 const getDrawings = asyncHandler(async (req, res) => {
